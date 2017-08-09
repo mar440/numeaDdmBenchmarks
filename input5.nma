@@ -1,0 +1,131 @@
+<hmi>
+<!-- Spring-Mass System (Mesh of 5 hexahedral elements)
+     Spring is modelized by 4 elements of Neo-Hookean materiel (E=789,568 MPa and Nu=0)
+	 Mass is modelized by 1 element of Neo-Hookean material (E=100.000MPa, Nu=0 and density=1 tonne/mm3) 
+     All nodes are blocked in (Y,Z) directions and a displacement is imposed to the spring end in X-direction (Ux = 1%L) -->
+	 
+<SIMULATION name="masse_resort_hd" type="harmonic">
+<!-- Frequency steps are controlled by a parameter function (see below <FUNCTION_COLLECTION>) -->
+    <FreqStep>PrFreq</FreqStep>
+		<LoadStep name="traction" >
+			<StartFreq>0.1</StartFreq>
+			<EndFreq>0.1</EndFreq>
+			<StepFreq>0.1</StepFreq>
+			<BC_list>
+				FIXE_TRACTION 
+				TRACTION
+			</BC_list>	
+		</LoadStep>
+<!-- Solver name="ddsolv"/ -->
+<!-- Solver name="pardiso"/ -->
+    <Solver name="ddsolv"/>
+</SIMULATION>
+
+
+<SOLVER_COLLECTION> 
+	<!--Linear solvers -->
+	<LinearSolver name="pardiso" type="DIRECT_PARDISO">
+	</LinearSolver>
+
+	<LinearSolver name="ddsolv" type="DIRECT_DDSOLV">
+		<dumpfile>true</dumpfile>
+		<blablafile>true</blablafile>
+		<FETI>2</FETI>
+		<LocalSolver>2</LocalSolver>
+	</LinearSolver>
+</SOLVER_COLLECTION>
+
+
+
+    <MODEL name="MasseRessort">
+        <Dimension>3D</Dimension>
+        <Mesh name="my_mesh">
+            <Filename>mesh.vtu</Filename>
+        </Mesh>
+        <BC name="FIXE_TRACTION" type="disp_func">
+            <Set>FIXE_TRACTION</Set>
+            <Function>zero</Function>
+            <Multiplier>1.0</Multiplier>
+        </BC>
+		<BC name="TRACTION" type="disp_func">
+            <Set>TRACTION</Set>
+            <Function>dispX</Function>
+            <Multiplier>1.0</Multiplier>
+        </BC>	
+    </MODEL>
+    <MATERIAL_COLLECTION name="db_material">
+        <Material name="MatRessort" id="0" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
+            
+						<!--<Param name="Nu">0.0</Param>-->
+			<Param name="Nu">0.3</Param>
+			<Param name="E">789.568</Param>
+						<!--<Param name="Density">1.0e-10</Param>-->
+			<Param name="Density">1</Param>
+			<Param name="Tgd">0.0</Param>
+        </Material>
+		<Material name="MatMasse" id="1" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
+						<!--<Param name="Nu">0.0</Param>-->
+			<Param name="Nu">0.3</Param>
+			<Param name="E">100000.0</Param>
+			<Param name="Density">1.0</Param>
+			<Param name="Tgd">0.0</Param>
+        </Material>			
+    </MATERIAL_COLLECTION>
+	<FUNCTION_COLLECTION name="my_function_collection">
+		<Function name="zero" type="discrete_function">
+			<Interpolation>linear</Interpolation>
+			<Extrapolation_left>zero</Extrapolation_left>
+			<Extrapolation_right>zero</Extrapolation_right>
+			<Points>
+			0. 0. 100. 0.
+			</Points>
+		</Function>
+		<Function name="dispX" type="discrete_function">
+			<Interpolation>linear</Interpolation>
+			<Extrapolation_left>zero</Extrapolation_left>
+			<Extrapolation_right>zero</Extrapolation_right>
+			<Points>
+			0 0.05 100 0.05 
+			</Points>
+		</Function>
+		
+		<!-- Define a parameter function to handle frequency steps -->
+    <Function name="freq_line" type="discrete_function">
+        <Interpolation>piecewise_constant</Interpolation>
+        <Extrapolation_left>continue_value</Extrapolation_left>
+        <Extrapolation_right>continue_value</Extrapolation_right>
+        <Points>
+            0.0       0.1 
+            0.6       0.05
+            0.65      0.01
+			0.66      0.001
+            0.67      0.01
+			0.7       0.1
+            1.9       0.01
+			1.98      0.005
+			1.995     0.01
+			2.005     0.005
+			2.01      0.01
+			2.05      0.05
+			2.1       0.1
+        </Points>
+    </Function>
+		
+	<Function name="PrFreq" type="parameter_function">
+        <Multiplier>1.0</Multiplier>
+        <ft>freq_line</ft>
+    </Function>     
+	</FUNCTION_COLLECTION>
+
+
+  <PostProcessing> 
+    <Output mesh="all" name="out_Model" output_frequency="increment" type="Model" write="paraview">
+        <displace value="yes" />
+        <internal_force value="yes" />
+        <!--	<cauchy_stress value="yes" />
+    <vonmises value="yes" /> -->
+    </Output> 
+  </PostProcessing>
+
+    
+</hmi>

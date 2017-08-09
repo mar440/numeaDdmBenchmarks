@@ -1,0 +1,5 @@
+*.sw*
+__python__/*.sw*
+*.bak
+*.vtu
+*.json

@@ -1,0 +1,244 @@
+<hmi> 
+
+<SIMULATION name="2D_cas_simple">
+    <LoadStep name="Y_displacement">
+        <StartTime>0.0</StartTime> <!-- Initial time for this load step -->
+        <EndTime>5.0</EndTime>    <!-- Final time for this load step -->
+        <StepTime>1.00</StepTime>   <!-- Time step for this load step -->
+
+        <BC_list>
+          BC_BLOCKED
+	  BC_DISP_Y
+	  BC_BLOCKED_XZ
+        </BC_list>
+    </LoadStep>
+
+    <Solver name="nls_ddsolv"/>
+
+</SIMULATION>
+
+
+  <SOLVER_COLLECTION>
+	
+    <NonLinearSolver name="nls_ddsolv" type="FULL_NEWTON" linear="ddsolv">
+      <ConvergenceCriterion type="DN" value="1e-3"/>
+      <ConvergenceCriterion type="EN" function="ENconvergenceFactor"/>
+    </NonLinearSolver>
+	<LinearSolver name="ddsolv" type="DIRECT_DDSOLV">
+		<dumpfile>true</dumpfile>
+		<blablafile>true</blablafile>
+		<FETI>2</FETI>
+		<Tolerance>1e-9</Tolerance>
+		<eps_iter>1e-7</eps_iter>
+		<force_unsymmetric>1</force_unsymmetric>
+		<LocalSolver>2</LocalSolver>
+	</LinearSolver>
+
+	<LinearSolver name="pardiso" type="DIRECT_PARDISO">
+	</LinearSolver>
+
+  </SOLVER_COLLECTION>
+
+
+
+<MODEL name="2D_cas_simple">
+
+    <Dimension>2D</Dimension>
+
+    <Mesh name="2D_cas_simple">
+        <Filename>mesh.vtu</Filename>
+    </Mesh>
+
+
+
+
+<!-- -->
+    <DofSet name="BLOCKED_XZ">
+		<type>selector</type>
+        <selector_name>sel_disp_nodes_up_dirichlet</selector_name>
+        <dof_isX>true</dof_isX>
+        <dof_isY>false</dof_isY>
+        <dof_isZ>false</dof_isZ>
+    </DofSet>
+	
+    <BC name="BC_BLOCKED_XZ" type="disp_func">
+        <Set>BLOCKED_XZ</Set>
+        <Function>zero</Function>
+        <Multiplier>1.0</Multiplier>
+    </BC> 
+<!-- -->
+    <DofSet name="DISP_Y">
+		<type>selector</type>
+        <selector_name>sel_disp_nodes_up_dirichlet</selector_name>
+        <dof_isX>false</dof_isX>
+        <dof_isY>true</dof_isY>
+        <dof_isZ>false</dof_isZ>
+    </DofSet>
+	
+    <BC name="BC_DISP_Y" type="disp_func">
+        <Set>DISP_Y</Set>
+        <Function>Fct_Y_Disp</Function>
+        <Multiplier>-0.8</Multiplier>
+    </BC> 
+<!-- -->
+    <DofSet name="BLOCKED_ALL">
+		<type>selector</type>
+        <selector_name>sel_disp_nodes_down_dirichlet</selector_name>
+        <dof_isX>true</dof_isX>
+        <dof_isY>true</dof_isY>
+        <dof_isZ>true</dof_isZ>
+    </DofSet>
+    <BC name="BC_BLOCKED" type="disp_func">
+        <Set>BLOCKED_ALL</Set>
+        <Function>zero</Function>
+        <Multiplier>1.</Multiplier>
+    </BC>
+	
+<!--	
+    <MeshBoundary name="Soft_boundary">
+        <Selector>Sel_contact_master</Selector>
+    </MeshBoundary>
+	
+	<MeshBoundary name="Rigid_boundary">
+        <Selector>Sel_contact_slave</Selector>
+    </MeshBoundary>
+
+    <CONTACT_INTERFACE name="contact_RBC1_FlexRigid">
+        <PART_A name="Rigid_boundary" type="MeshBoundary"/>
+        <PART_B name="Soft_boundary" type="MeshBoundary"/>
+        <Algorithm value="NODE_TO_SEGMENT" option="TWO_PASSES" slave="Soft_boundary"/>
+        <Penalty value="automatic" function="penalty"/>
+    </CONTACT_INTERFACE>
+-->
+</MODEL>
+
+
+<MATERIAL_COLLECTION name="db_material">
+
+    <Material name="Soft" id="1" type="Compressible_Hyperelastic">
+        <Param name="Nu">0.30</Param>
+        <Param name="E">6</Param>
+    </Material>
+
+    <Material name="Rigid" id="2" type="Compressible_Hyperelastic">
+        <Param name="Nu">0.4</Param>
+        <Param name="E">10000</Param>
+    </Material>
+	
+	<Material name="Rubber" id="3" type="Mooney_Rivlin">
+        <Param name="C0">10</Param>
+        <Param name="C1">0</Param>
+		<Param name="Bulk">100</Param>
+    </Material>
+
+</MATERIAL_COLLECTION>
+
+
+<FORMULATIONS>
+    <Formulation name="F1" type="PC2DQUAD4" id="1"/>
+	<Formulation name="F2" type="PC2DQUAD4" id="2"/>
+	<!--Formulation name="F2" type="PC2DQUAD4_3FSR" id="30"/-->
+</FORMULATIONS>
+
+
+<FUNCTION_COLLECTION name="Functions">
+    <Function name="Fct_Y_Disp" type="discrete_function">
+        <Interpolation>linear</Interpolation>
+        <Extrapolation_left>zero</Extrapolation_left>
+        <Extrapolation_right>zero</Extrapolation_right>
+        <Points>
+            0.0     0.0
+           10.0     10.0
+        </Points>
+    </Function>
+
+    <Function name="penalty" type="parameter_function">
+        <Multiplier>10.</Multiplier>
+    </Function>
+</FUNCTION_COLLECTION>
+
+<!-- Definition of all selectors -->
+
+<SELECTOR_COLLECTION name="Selectors">
+
+
+<!--
+    <Selector name="Sel_contact_master" type="material">
+        <id>1</id> 
+        <entity>facet</entity>
+        <region>boundary</region> 
+    </Selector>
+-->
+
+<!-- 
+    <Selector name="Sel_contact_master" type="feature_angle">
+        <entity>facet</entity>
+        <region>boundary</region>
+        <Point>3.53553 3.53553 0.0</Point>
+
+		<Angle>90</Angle>
+    </Selector>
+-->
+	
+	<Selector name="Sel_contact_slave" type="planar">
+		<SelectionBase name="MaterialId">2</SelectionBase>
+        <entity>facet</entity>
+        <region>boundary</region>
+        <Point>0.0 5.0 0.0</Point>
+		<Axis>y</Axis>
+		<Epsilon>0.01</Epsilon>
+    </Selector> 
+
+
+<!-- 
+    <Selector name="Sel_contact_master" type="planar">
+	<SelectionBase name="MaterialId">1</SelectionBase>
+        <entity>facet</entity>
+        <region>boundary</region>
+        <Point>0.0 0.0 0.0</Point>
+		<Axis>y</Axis>
+		<Epsilon>1.5</Epsilon>
+    </Selector>
+	
+    <Selector name="Sel_contact_slave" type="planar">
+		<SelectionBase name="MaterialId">2</SelectionBase>
+        <entity>facet</entity>
+        <region>boundary</region>
+        <Point>0.0 0.0 0.0</Point>
+		<Axis>y</Axis>
+		<Epsilon>1.5</Epsilon>
+    </Selector>
+-->
+	
+    <Selector name="sel_disp_nodes_up_dirichlet" type="planar">
+<!--		<SelectionBase name="MaterialId">2</SelectionBase> -->
+        <entity>node</entity>
+        <region>boundary</region>
+        <Point>0.0 0.0 0.0</Point>
+		<Axis>x</Axis>
+		<Epsilon>0.01</Epsilon>
+    </Selector>
+	
+    <Selector name="sel_disp_nodes_down_dirichlet" type="planar">
+<!--		<SelectionBase name="MaterialId">1</SelectionBase> -->
+        <entity>node</entity>
+        <region>boundary</region>
+        <Point>-5.0 0.0 0.0</Point>
+		<Axis>y</Axis>
+		<Epsilon>0.01</Epsilon>
+    </Selector>
+	
+	
+</SELECTOR_COLLECTION>
+
+<PostProcessing>
+
+    <Output name="out_Model" type="Model"  mesh="all" output_frequency="increment" write="paraview">
+        <displace value="yes"/>
+        <internal_force value="yes"/>
+		<external_force value="no"/>
+    </Output>
+
+
+</PostProcessing>
+</hmi>
