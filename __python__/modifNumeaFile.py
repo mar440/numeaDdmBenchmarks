@@ -3,16 +3,22 @@ import xml.etree.ElementTree as ET
 import sys
 
 
-#dbg_ = True
-#if dbg_ :
-#    argv = ["modifNumeaFile","NMA_FILE","input1.nma",\
-#            "LinearSolver","DIRECT_PARDISO",\
-#            "blablafile","false",\
-#            "dumpfile","false",\
-#            "FETI","2",\
-#            "eps_iter","1e-4",\
-#            "dumpfileCSRmatrix","true"]
-#    sys.argv = argv
+# if dbg_ = True 
+#   script 'modifNumeaFile" can be launched without argument (debugging mode).
+# It requires put "input1.nma" file in the same directory.
+
+dbg_ = False
+
+
+if dbg_ :
+    argv = ["modifNumeaFile","NMA_FILE","input1.nma",\
+            "Solver","gen_solver_ddsolv",\
+            "blablafile","false",\
+            "dumpfile","false",\
+            "FETI","1",\
+            "eps_iter","1e-5",\
+            "dumpfileCSRmatrix","false"]
+    sys.argv = argv
 
 
 def setPar(argv,param):
@@ -64,18 +70,18 @@ if  NMA_FILE is not None:
 print("\n\n--\n")
 all_root = root.getiterator()     
 for ii in all_root: 
-    
-    
+     
     if ddsolv_setting.get(ii.tag) != None:
         
-        if ii.tag == "LinearSolver":        
-            #LinearSolver = ii 
-            
-            ii.attrib["type"] = ddsolv_setting.get(ii.tag)
+        
+        if ii.tag == "Solver":        
+            ii.attrib["name"] = ddsolv_setting.get(ii.tag)
             continue
         
         ii.text = ddsolv_setting.get(ii.tag)
         
-    
+
+if dbg_:
+    NMA_FILE = "_"+NMA_FILE
  
 tree.write(NMA_FILE)
