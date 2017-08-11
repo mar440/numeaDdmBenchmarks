@@ -15,12 +15,41 @@
 
     </LoadStep>
 
-    <Solver name="nls_ddsolv"/>
+    <Solver name="gen_solver_pardiso" /> 
 
 </SIMULATION>
 
-<!-- BC_DISP_Y -->
+<SOLVER_COLLECTION>
 
+    <NonLinearSolver linear="lin_ddsolv" name="gen_solver_ddsolv" type="FULL_NEWTON">
+        <ConvergenceCriterion type="DN" value="1e-3" />
+        <ConvergenceCriterion function="ENconvergenceFactor" type="EN" />
+    </NonLinearSolver> 
+
+    <LinearSolver name="lin_ddsolv" type="DIRECT_DDSOLV">
+        <dumpfile>false</dumpfile>
+        <dumpfileCSRmatrix>true</dumpfileCSRmatrix>
+        <blablafile>true</blablafile>
+        <patch_radius>1</patch_radius>
+        <FETI>2</FETI>
+        <Tolerance>1e-9</Tolerance>
+        <eps_iter>1e-4</eps_iter>
+        <force_unsymmetric>1</force_unsymmetric>
+        <LocalSolver>2</LocalSolver>
+    </LinearSolver> 
+
+    <NonLinearSolver linear="lin_pardiso" name="gen_solver_pardiso" type="FULL_NEWTON">
+        <ConvergenceCriterion type="DN" value="1e-3" />
+        <ConvergenceCriterion function="ENconvergenceFactor" type="EN" />
+    </NonLinearSolver> 
+
+    <LinearSolver name="lin_pardiso" type="DIRECT_PARDISO">
+    </LinearSolver> 
+    
+
+</SOLVER_COLLECTION>
+<!-- BC_DISP_Y -->
+<!--
   <SOLVER_COLLECTION> 
     <NonLinearSolver name="nls_ddsolv" type="FULL_NEWTON" linear="ddsolv">
       <ConvergenceCriterion type="DN" value="1e-3"/>
@@ -36,9 +65,9 @@
 		<LocalSolver>2</LocalSolver>
 	</LinearSolver> 
 	<LinearSolver name="pardiso" type="DIRECT_PARDISO">
-	</LinearSolver>
-
+	</LinearSolver> 
   </SOLVER_COLLECTION>
+-->
 
 
 

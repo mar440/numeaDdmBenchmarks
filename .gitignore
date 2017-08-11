@@ -3,3 +3,6 @@ __python__/*.sw*
 *.bak
 *.vtu
 *.json
+__python__/*.nma
+output.txt
+numea_solution

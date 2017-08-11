@@ -1,62 +1,76 @@
 <hmi>
+
 <SIMULATION name="DDSOLV_Conform">
     <LoadStep name="DDSOLV_Conform">
-        <StartTime>0.</StartTime>
-        <EndTime>1.0</EndTime>
-        <StepTime>1.0</StepTime>
-        <!--        <StepTime>0.25</StepTime> -->
-        <!--Choose your favorite boundary condition-->
+        <StartTime>0.</StartTime> <!-- Initial time for this load step -->
+        <EndTime>1.0</EndTime>   <!-- Final time for this load step -->
+        <StepTime>1.0</StepTime>   <!-- Time step for this load step --> 
 
-
-    <BC_list>
-	BC_FIXE_LEFT
-	BC_TRACTION_ROT_X
-      </BC_list>
-	  
-
+        <BC_list>
+            BC_FIXE_LEFT
+            BC_TRACTION_ROT_X
+        </BC_list> 
     </LoadStep>
    
-    <Solver name="nls_ddsolv"/> 
-  </SIMULATION>
-
-  <!--
-   <NonLinearSolver linear="pardiso" name="nls_ddsolv" type="FULL_NEWTON"> 
-      <ConvergenceCriterion type="DN" value="1e-3"/> 
-      <ConvergenceCriterion type="EN" value="1e-2"/> 
-    </NonLinearSolver> 
-
-    <NonLinearSolver linear="pardiso" name="nls_ddsolv" type="FULL_NEWTON"> 
-      <ConvergenceCriterion type="DN" value="1e-3"/> 
-    </NonLinearSolver> 
--->
+    <Solver name="gen_solver_pardiso" /> 
+</SIMULATION>
 
 
+<SOLVER_COLLECTION>
 
-  
+    <NonLinearSolver linear="lin_ddsolv" name="gen_solver_ddsolv" type="FULL_NEWTON">
+        <ConvergenceCriterion type="DN" value="1e-3" />
+        <ConvergenceCriterion function="ENconvergenceFactor" type="EN" />
+    </NonLinearSolver> 
+
+    <LinearSolver name="lin_ddsolv" type="DIRECT_DDSOLV">
+        <dumpfile>false</dumpfile>
+        <dumpfileCSRmatrix>true</dumpfileCSRmatrix>
+        <blablafile>true</blablafile>
+        <patch_radius>1</patch_radius>
+        <FETI>2</FETI>
+        <Tolerance>1e-9</Tolerance>
+        <eps_iter>1e-4</eps_iter>
+        <force_unsymmetric>1</force_unsymmetric>
+        <LocalSolver>2</LocalSolver>
+    </LinearSolver> 
+
+    <NonLinearSolver linear="lin_pardiso" name="gen_solver_pardiso" type="FULL_NEWTON">
+        <ConvergenceCriterion type="DN" value="1e-3" />
+        <ConvergenceCriterion function="ENconvergenceFactor" type="EN" />
+    </NonLinearSolver> 
+
+    <LinearSolver name="lin_pardiso" type="DIRECT_PARDISO">
+    </LinearSolver> 
+    
+
+</SOLVER_COLLECTION>
+<!--
     <SOLVER_COLLECTION>
-    <NonLinearSolver name="nls_ddsolv" type="FULL_NEWTON" linear="ddsolv">
-      <ConvergenceCriterion type="DN" value="1e-3"/>
-      <ConvergenceCriterion type="EN"  value="1e-2"/>
-    </NonLinearSolver>
-	<LinearSolver name="ddsolv" type="DIRECT_DDSOLV">
+        <NonLinearSolver name="nls_ddsolv" type="FULL_NEWTON" linear="ddsolv">
+        <ConvergenceCriterion type="DN" value="1e-3"/>
+        <ConvergenceCriterion type="EN"  value="1e-2"/>
+        </NonLinearSolver>
+        <LinearSolver name="ddsolv" type="DIRECT_DDSOLV">
 		<dumpfile>false</dumpfile>
+		<dumpfileCSRmatrix>false</dumpfileCSRmatrix>
 		<blablafile>true</blablafile>
+        <patch_radius>1</patch_radius>
 		<FETI>2</FETI>
+		<Tolerance>1e-9</Tolerance>
 		<eps_iter>1e-5</eps_iter>
 		<force_unsymmetric>1</force_unsymmetric>
 		<LocalSolver>2</LocalSolver>
-	</LinearSolver>
-    
-    <LinearSolver name="pardiso" type="DIRECT_PARDISO">
-	</LinearSolver>
-
+	    </LinearSolver> 
+        <LinearSolver name="pardiso" type="DIRECT_PARDISO">
+	    </LinearSolver> 
   </SOLVER_COLLECTION>
+-->
   
-
-  <MODEL name="square10x10">
+    <MODEL name="square10x10">
     <Dimension>3D</Dimension>
     <Mesh name="CubesX2">
-	<Filename>mesh.vtu</Filename>
+	    <Filename>mesh.vtu</Filename>
     </Mesh>
 	
     <!-- LEFT Boundary condition -->
@@ -139,18 +153,17 @@
       <Param name="Nu">0.30</Param>
       <Param name="E">210000</Param>
     </Material>
+
+    <Material name="Mat3BIS" id="2" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
+      <Param name="Nu">0.1</Param>
+      <Param name="E">100</Param>
+    </Material> 
 	
     <Material name="Mat3" id="3" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
       <Param name="Nu">0.1</Param>
       <Param name="E">100</Param>
-    </Material>
-	
+    </Material> 
 		
-    <Material name="Mat3BIS" id="2" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
-      <Param name="Nu">0.1</Param>
-      <Param name="E">100</Param>
-    </Material>
-	
     <Material name="Mat4" id="20" type="Mooney_Rivlin" uncoupled="1" volumetric_type="ABAQUS"  >
       <Param name="C0">24.</Param>
       <Param name="C1">1.5</Param>

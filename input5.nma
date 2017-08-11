@@ -16,26 +16,37 @@
 				TRACTION
 			</BC_list>	
 		</LoadStep>
-<!-- Solver name="ddsolv"/ -->
-<!-- Solver name="pardiso"/ -->
-    <Solver name="ddsolv"/>
+    <Solver name="gen_solver_pardiso" /> 
 </SIMULATION>
 
 
 <SOLVER_COLLECTION> 
-	<!--Linear solvers -->
-	<LinearSolver name="pardiso" type="DIRECT_PARDISO">
-	</LinearSolver>
 
-	<LinearSolver name="ddsolv" type="DIRECT_DDSOLV">
+    <LinearSolver name="gen_solver_ddsolv" type="DIRECT_DDSOLV">
+        <dumpfile>false</dumpfile>
+        <dumpfileCSRmatrix>true</dumpfileCSRmatrix>
+        <blablafile>true</blablafile>
+        <!--        <patch_radius>1</patch_radius> -->
+        <FETI>2</FETI>
+        <!--    <Tolerance>1e-9</Tolerance> -->
+        <eps_iter>1e-4</eps_iter>
+        <force_unsymmetric>1</force_unsymmetric>
+        <LocalSolver>2</LocalSolver>
+    </LinearSolver> 
+
+
+    <LinearSolver name="gen_solver_pardiso" type="DIRECT_PARDISO">
+    </LinearSolver> 
+
+    <!--
+	<LinearSolver name="solver_001" type="DIRECT_DDSOLV">
 		<dumpfile>true</dumpfile>
 		<blablafile>true</blablafile>
 		<FETI>2</FETI>
 		<LocalSolver>2</LocalSolver>
 	</LinearSolver>
-</SOLVER_COLLECTION>
-
-
+    -->
+</SOLVER_COLLECTION> 
 
     <MODEL name="MasseRessort">
         <Dimension>3D</Dimension>
@@ -56,15 +67,12 @@
     <MATERIAL_COLLECTION name="db_material">
         <Material name="MatRessort" id="0" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
             
-						<!--<Param name="Nu">0.0</Param>-->
 			<Param name="Nu">0.3</Param>
 			<Param name="E">789.568</Param>
-						<!--<Param name="Density">1.0e-10</Param>-->
 			<Param name="Density">1</Param>
 			<Param name="Tgd">0.0</Param>
         </Material>
 		<Material name="MatMasse" id="1" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
-						<!--<Param name="Nu">0.0</Param>-->
 			<Param name="Nu">0.3</Param>
 			<Param name="E">100000.0</Param>
 			<Param name="Density">1.0</Param>
@@ -109,8 +117,7 @@
 			2.05      0.05
 			2.1       0.1
         </Points>
-    </Function>
-		
+    </Function> 
 	<Function name="PrFreq" type="parameter_function">
         <Multiplier>1.0</Multiplier>
         <ft>freq_line</ft>
