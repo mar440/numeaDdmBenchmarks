@@ -1,10 +1,8 @@
 from __future__ import print_function
 import numpy as np
-import sys
-import imp
+import sys 
 
-
-SYM_CASE = False
+ 
 
 
 def setPar(argv,param):
@@ -14,7 +12,7 @@ def setPar(argv,param):
 	except ValueError:
             i = -1
 	if i < 0 or i == len(argv): 
-            print("parameter %s does not exist" % (param))
+            print("parameter '%s' does not exist" % (param))
             print("\n or  %s does not have specified a value" % (param))
             str0 = ""
 	else:
@@ -22,7 +20,7 @@ def setPar(argv,param):
 	return str0 
 
 def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
-         Nx2 = 1, Ny2 = 2, Nz2 = 1,nx2 = 4, ny2 = 2, nz2 = 2, benchmark = ''): 
+         Nx2 = 1, Ny2 = 2, Nz2 = 1,nx2 = 4, ny2 = 2, nz2 = 2, BENCHMARK = ''): 
 
 
     if len(sys.argv)>0:
@@ -50,14 +48,14 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
         exec(outStr)
         outStr = setPar(sys.argv,"nz2")
         exec(outStr)
-        outStr = setPar(sys.argv,"benchmark")
+        outStr = setPar(sys.argv,"BENCHMARK")
         exec(outStr)
 
 
         Lx1 = Ly1 = Lz1 = 0.0; x10 = y10 = z10 = 0.0; R1 = 0.0
         Lx2 = Ly2 = Lz2 = 0.0; x20 = y20 = z20 = 0.0; R2 = 0.0
 
-        if benchmark == 1:
+        if BENCHMARK == 1:
 	    R2 = 5.0  # outer radius 
 	    R1 = 4.0  # inner radius
 	    #  - square 
@@ -65,10 +63,8 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             x10 = 0.0
 	    y10 = R1
 	    Lx1 = 0.5 * np.pi 
-	    Ly1 = (R2 - R1)
-
-
-        elif benchmark == 2:
+	    Ly1 = (R2 - R1) 
+        elif BENCHMARK == 2:
             H = 2.0    
             R1 = 4.0  # inner radius
             R2 = 5.0  # outer radius 
@@ -83,36 +79,39 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             Ly2 = H
             x20 = -0.5 * Lx2 
             y20 = R2 
-        elif benchmark == 3:
-            c = 3
-        elif benchmark == 4: 
-            H = 2.0
-
+        elif BENCHMARK == 3: 
+            H = 2.0 
             Lx1 = 5. 
             Ly1 = 5.
             x10 = -0.5 * Lx1
-            y10 = 0.0
-    
+            y10 = 0.0 
+            #
             Lx2 = H 
             Ly2 = H
             x20 = -0.5 * Lx2 
             y20 = 0.999 * Ly1 
-
-        elif benchmark == 5:
-            Lx1 = 6.
-            Ly1 = 1.
-            Lz1 = 1. 
-            x10 = 0.0
-            y10 = 0.0
-            z10 = 0.0
-        elif benchmark == 6:
+        elif BENCHMARK == 4:
             Lx1 = 8.
             Ly1 = 2.
             Lz1 = 2. 
             x10 = -0.5 * Lx1
             y10 = -0.5 * Ly1
             z10 = -0.5 * Lz1 
-        elif benchmark == 7: 
+        elif BENCHMARK == 5:
+            Lx1 = 6.
+            Ly1 = 1.
+            Lz1 = 1. 
+            x10 = 0.0
+            y10 = 0.0
+            z10 = 0.0
+        elif BENCHMARK == 6:
+            Lx1 = 8.
+            Ly1 = 2.
+            Lz1 = 2. 
+            x10 = -0.5 * Lx1
+            y10 = -0.5 * Ly1
+            z10 = -0.5 * Lz1 
+        elif BENCHMARK == 7: 
             # lower (bigger)
             Lx1 = 4.00
             Ly1 = 2.00
@@ -127,7 +126,7 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             x20 = 0.00
             y20 = -1.00
             z20 = -1.00 
-        elif benchmark == 8: 
+        elif BENCHMARK == 8: 
             # lower (bigger)
             Lx1 = 5.00
             Ly1 = 5.00
@@ -143,7 +142,7 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             x20 = -Lx2 * 0.50
             y20 =  0.999999 * Ly1
             z20 = -Lz2 * 0.50
-        elif benchmark == 9:
+        elif BENCHMARK == 9:
             # lower (bigger)
             Lx1 = 2.50
             Ly1 = 5.00
@@ -165,7 +164,7 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
 
     elements, coordinates, PartitionId, MaterialId, FormulationId, Piece, Piece_nod, dim = \
         create_fem(  Lx1, Ly1, Lz1, x10, y10, z10, nx1, ny1, nz1, Nx1, Ny1, Nz1, R1,\
-                        Lx2, Ly2, Lz2, x20, y20, z20, nx2, ny2, nz2, Nx2, Ny2, Nz2, R2, benchmark) 
+                        Lx2, Ly2, Lz2, x20, y20, z20, nx2, ny2, nz2, Nx2, Ny2, Nz2, R2, BENCHMARK) 
     
     file_name_r = 'mesh.vtu' 
 
@@ -181,7 +180,7 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
         vtu2d(elements,coordinates,MaterialId, PartitionId, FormulationId,file_name_r)
     elif dim == 3:
         vtu3d(   elements,coordinates,MaterialId, PartitionId, FormulationId, 
-                            Piece, Piece_nod, file_name_r, benchmark, nxAll, nyAll, nzAll)
+                            Piece, Piece_nod, file_name_r, BENCHMARK, nxAll, nyAll, nzAll)
 
 
 # HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -191,7 +190,7 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
 def create_fem( Lx1, Ly1, Lz1, x10, y10, z10,\
                    nx1, ny1, nz1, Nx1, Ny1, Nz1, R1,\
                 Lx2, Ly2, Lz2, x20, y20, z20,\
-                    nx2, ny2, nz2, Nx2, Ny2, Nz2, R2, benchmark):
+                    nx2, ny2, nz2, Nx2, Ny2, Nz2, R2, BENCHMARK):
 
 
     if Lz1 == 0:
@@ -214,10 +213,10 @@ def create_fem( Lx1, Ly1, Lz1, x10, y10, z10,\
             create_fem3d(Lx2, Ly2, Lz2, x20, y20, z20, nx2, ny2, nz2, Nx2, Ny2, Nz2)
 
 
-    if benchmark == 9:
+    if BENCHMARK == 9:
         coordinates1, coordinates2 = \
             transformCoord(coordinates1,coordinates2, Lx1, Ly1, R1, Lx2, Ly2, R2) 
-    if benchmark == 1 or benchmark == 2: 
+    if BENCHMARK == 1 or BENCHMARK == 2: 
 	x_transform = coordinates1[:,1] * np.sin(coordinates1[:,0])
 	y_transform = coordinates1[:,1] * np.cos(coordinates1[:,0])
 	coordinates1[:,0] = x_transform; coordinates1[:,1] = y_transform
@@ -240,7 +239,7 @@ def create_fem( Lx1, Ly1, Lz1, x10, y10, z10,\
 
 
 
-    if benchmark == 7:
+    if BENCHMARK == 7:
         np.savetxt('coordinatesLeft.dat',coordinates1)
         np.savetxt('coordinatesRight.dat',coordinates2)
         np.savetxt('elements.dat',elements) 
@@ -359,8 +358,7 @@ def create_fem3d(   Lx = 1., Ly = 1., Lz = 1., x0 = 0.0, y0 = 0.0, z0 = 0.0,\
         nnods = (nx+1)*(ny+1)*(nz+1)
         nelem =  nx*ny*nz
         coordinates = np.zeros((nnods,3),dtype = np.float64)
-        elements    = np.zeros((nelem,8),dtype = np.int32)   
-        edges       = np.zeros((2*nx*ny+2*nx*nz+2*ny*nz,7), dtype = np.int32) 
+        elements    = np.zeros((nelem,8),dtype = np.int32)    
         
         
         cnt = 0
@@ -399,15 +397,13 @@ def create_fem3d(   Lx = 1., Ly = 1., Lz = 1., x0 = 0.0, y0 = 0.0, z0 = 0.0,\
             PartitionId = X.reshape(nelem, order='F') 
         else:
             PartitionId = np.zeros(nelem, dtype = np.int32) 
-
-        edges = np.array([0,0])
+ 
         MaterialId = np.ones(nelem, dtype = np.int32)
         FormulationId = 30 * np.ones(nelem, dtype = np.int32 )
          
         
     #    elements = 0
-    #    coordinates = 0
-    #    edges = 0
+    #    coordinates = 0 
     #    PartitionId = 0
     #    MaterialId = 0
     #    FormulationId = 0
@@ -846,7 +842,7 @@ def vtuHexa(elements,coordinates,MaterialId, PartitionId, FormulationId,file_nam
     f.close()
 
 def vtu3d(  elements, coordinates, MaterialId, PartitionId, FormulationId, 
-            PieceId_elem,PieceId_nod, file_name, benchmark,
+            PieceId_elem,PieceId_nod, file_name, BENCHMARK,
             nxAll, nyAll, nzAll):
         
 #        (elements,coordinates,MaterialId, PartitionId, FormulationId,file_name )
@@ -869,7 +865,7 @@ def vtu3d(  elements, coordinates, MaterialId, PartitionId, FormulationId,
 
 # HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH 
 # time harmonic problem only - dirichlet for all nodes ...
-    if (benchmark == 5):
+    if (BENCHMARK == 5):
         str = '%s<FieldData>\n' % (2 * sp1)
         f.write(str)
 
@@ -1149,3 +1145,17 @@ def vtu3d(  elements, coordinates, MaterialId, PartitionId, FormulationId,
 
 if __name__ == "__main__":
 	main()
+    
+    
+    
+    
+
+ 
+#argv = ["meshGeneratorFilePy","meshGeneratorFilePy",\
+#            "BENCHMARK", "2",\
+#             "Nx1" , "2", "Ny1", "2" , "Nz1", "1", \
+#             "nx1" , "5", "ny1", "5" , "nz1", "5", \
+#             "Nx2" , "3", "Ny2", "2" , "Nz2", "1", \
+#             "nx2" , "3", "ny2", "5" , "nz2", "3"]
+#sys.argv = list(argv)
+#main()
