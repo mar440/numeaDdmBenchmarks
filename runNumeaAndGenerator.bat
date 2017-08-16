@@ -49,9 +49,6 @@ set PYTHON_EXE="C:\Users\mar440\AppData\Local\Continuum\Anaconda2\python.exe"
 REM ####     set path to "numea_driver.exe"
 set NUMEA_EXE="c:\Build_NUMEA_dev_am\Src\Release\numea_driver.exe" 
 
-REM ####     set name of "*.nma" file (solved by ddsolv)
-set NMA_FILE="input"!BENCHMARK!".nma" 
-
 REM ####     path to evironment variables setup file (for numea etc...)
 set PATH_TO_DEVENV_BAT_FILE="C:\devenv\win64\devenv_win64_v0_0.bat"
 
@@ -76,6 +73,9 @@ REM ####    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 REM ####    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 REM
 
+
+REM ####     set name of "*.nma" file (solved by ddsolv)
+set NMA_FILE="input"!BENCHMARK!".nma" 
 
 
 rem IF %BENCHMARK%==4 (
