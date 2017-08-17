@@ -4,7 +4,7 @@ setlocal enableextensions
 
 
 
-set BENCHMARK=7
+set BENCHMARK=1
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -76,6 +76,7 @@ REM
 
 REM ####     set name of "*.nma" file (solved by ddsolv)
 set NMA_FILE="input"!BENCHMARK!".nma" 
+
 
 
 rem IF %BENCHMARK%==4 (
@@ -182,7 +183,7 @@ copy /y !meshGeneratorPath!\!meshTableFiles!  !workingDirectory!
 
 cd /d !workingDirectory! 
 REM ####     copy nma file to working directory
-copy /y "..\"!NMA_FILE! .
+copy /y !currentDir!"\__nmaFiles__\"!NMA_FILE! .
 
 
 
