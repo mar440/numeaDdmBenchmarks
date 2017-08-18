@@ -4,7 +4,7 @@ setlocal enableextensions
 
 
 
-set BENCHMARK=1
+set BENCHMARK=9
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -76,7 +76,6 @@ REM
 
 REM ####     set name of "*.nma" file (solved by ddsolv)
 set NMA_FILE="input"!BENCHMARK!".nma" 
-
 
 
 rem IF %BENCHMARK%==4 (
