@@ -4,7 +4,7 @@ REM ENABLEEXTENSIONS
 
 
 
-set BENCHMARK=3
+set BENCHMARK=7
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -14,7 +14,6 @@ REM ####     6 - one beam (one piece) - quasi-static problem
 REM ####     7 - one beam (two pieces) - mortar - quasi-static problem
 REM ####     8 - two boxes in mutual contact - quasi-static problem
 REM ####     9 - two curved boxes in mutual contact - quasi-static problem
-
 
 set SOLVERS=2
 REM ####    -1  - files *.vtu and *.nma are generated only (numea is not launched)
@@ -29,7 +28,7 @@ set elm_nx1=6
 set elm_ny1=8
 set elm_nz1=6
 
-set sub_Nx1=1
+set sub_Nx1=2
 set sub_Ny1=2
 set sub_Nz1=1
 
@@ -37,9 +36,9 @@ set elm_nx2=6
 set elm_ny2=8
 set elm_nz2=5 
 
-set sub_Nx2=2
+set sub_Nx2=1
 set sub_Ny2=1
-set sub_Nz2=2
+set sub_Nz2=1
 
 REM ####     set "DEVENV_WAS_CALLED=0"
 
@@ -67,6 +66,9 @@ set FETI="2"
 
 REM ####     set iterative solver tolerance 
 set eps_iter="1e-6"
+
+REM ####     set direct solver (0 - tridiag, 1 - ?, 2 - pardiso, 3 - dissection)
+set LocalSolver="0"
 
 REM ####    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 REM ####    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
@@ -183,7 +185,7 @@ copy /y %currentDir%"\__nmaFiles__\"%NMA_FILE% .
 
 
 IF %SOLVERS% EQU -1 (
-%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix%
+%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%
 @echo " only *.nma and *.vtu files are generated (without NUMEA)"
 cd /d %currentDir% 
 EXIT /b
@@ -209,7 +211,7 @@ IF %SOLVERS% EQU 4 (set /A USE_PARDISO=1)
 set /A nnd1_1=%elm_nx1%*%sub_Nx1%+1
 
 IF %USE_PARDISO% EQU 1 ( 
-%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_pardiso" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix%
+%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_pardiso" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%  
 %NUMEA_EXE%  %NMA_FILE% 
 if %SOLVERS% NEQ 4 (
 timeout 2
@@ -219,7 +221,7 @@ timeout 2
 
 
 IF %SOLVERS% LSS 4  (
-%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix%
+%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%
 mpiexec.smpd -n %mpi_size% %NUMEA_EXE%  %NMA_FILE% 1>&2 )
 
 REM ####     go back to original directory
