@@ -17,7 +17,8 @@ if dbg_ :
             "dumpfile","false",\
             "FETI","1",\
             "eps_iter","1e-5",\
-            "dumpfileCSRmatrix","false"]
+            "dumpfileCSRmatrix","false",\
+            "LocalSolver","0"]
     sys.argv = argv
 
 
