@@ -31,6 +31,7 @@
         <eps_iter>1e-4</eps_iter>
         <force_unsymmetric>1</force_unsymmetric>
         <MortarLocalization>master</MortarLocalization> 
+        <!--    <mortar_localization>slave</mortar_localization>  -->
         <LocalSolver>2</LocalSolver>
     </LinearSolver> 
 
