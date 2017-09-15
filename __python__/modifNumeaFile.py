@@ -18,7 +18,8 @@ if dbg_ :
             "FETI","1",\
             "eps_iter","1e-5",\
             "dumpfileCSRmatrix","false",\
-            "LocalSolver","0"]
+            "LocalSolver","0",\
+            "MortarLocalization","master"]
     sys.argv = argv
 
 
