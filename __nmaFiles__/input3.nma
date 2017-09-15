@@ -3,8 +3,8 @@
 <SIMULATION name="2D_cas_simple">
     <LoadStep name="Y_displacement">
         <StartTime>0.0</StartTime> <!-- Initial time for this load step -->
-        <EndTime>0.1</EndTime>    <!-- Final time for this load step -->
-        <StepTime>0.1</StepTime>   <!-- Time step for this load step -->
+        <EndTime>1.0</EndTime>    <!-- Final time for this load step -->
+        <StepTime>0.2</StepTime>   <!-- Time step for this load step -->
 
         <BC_list>
             BC_BLOCKED
@@ -175,7 +175,7 @@
         <Extrapolation_right>zero</Extrapolation_right>
         <Points>
             0.0     0.0
-           10.0     -10.0
+           1.0     -1.0
         </Points>
     </Function>
 
