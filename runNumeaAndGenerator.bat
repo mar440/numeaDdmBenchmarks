@@ -4,7 +4,7 @@ REM ENABLEEXTENSIONS
 
 
 
-set BENCHMARK=7
+set BENCHMARK=1
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -15,7 +15,7 @@ REM ####     7 - one beam (two pieces) - mortar - quasi-static problem
 REM ####     8 - two boxes in mutual contact - quasi-static problem
 REM ####     9 - two curved boxes in mutual contact - quasi-static problem
 
-set SOLVERS=2
+set SOLVERS=3
 REM ####    -1  - files *.vtu and *.nma are generated only (numea is not launched)
 REM ####     0  - launch ddsolv with '1' mpi process
 REM ####     1  - launch ddsolv with '1' mpi process + pardiso 
@@ -24,39 +24,38 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=6
-set elm_ny1=8
-set elm_nz1=6
-
-set sub_Nx1=2
-set sub_Ny1=2
-set sub_Nz1=1
-
-set elm_nx2=6
-set elm_ny2=8
-set elm_nz2=5 
-
-set sub_Nx2=1
-set sub_Ny2=1
-set sub_Nz2=1
-
+set elm_nx1=10 
+set elm_ny1=10 
+set elm_nz1=10
+              
+set sub_Nx1=8 
+set sub_Ny1=2 
+set sub_Nz1=2
+              
+set elm_nx2=10 
+set elm_ny2=10 
+set elm_nz2=10
+              
+set sub_Nx2=2 
+set sub_Ny2=1 
+set sub_Nz2=2
+            
 REM ####     set "DEVENV_WAS_CALLED=0"
 
 REM ####     set path to "python.exe"
-set PYTHON_EXE="C:\Users\mar440\AppData\Local\Continuum\Anaconda2\python.exe" 
+set PYTHON_EXE="C:\Program Files\ParaView 5.2.0-Qt4-OpenGL2-Windows-64bit\bin\pvpython.exe" 
 
 REM ####     set path to "numea_driver.exe"
-set NUMEA_EXE="c:\Build_NUMEA_dev_am\Src\Release\numea_driver.exe" 
-REM set NUMEA_EXE="c:\Build_NUMEA\Src\Release\numea_driver.exe" 
+set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
 
 REM ####     path to evironment variables setup file (for numea etc...)
-set PATH_TO_DEVENV_BAT_FILE="C:\devenv\win64\devenv_win64_v0_0.bat"
+set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
 
 REM ####     set blablafile (true or false)
 set blablafile="true"
 
 REM ####     set dumpfileCSRmatrix (true or false)
-set dumpfileCSRmatrix="true"
+set dumpfileCSRmatrix="false"
 
 REM ####     set dumpfile (true or false)
 set dumpfile="false"
@@ -68,7 +67,10 @@ REM ####     set iterative solver tolerance
 set eps_iter="1e-6"
 
 REM ####     set direct solver (0 - tridiag, 1 - ?, 2 - pardiso, 3 - dissection)
-set LocalSolver="0"
+set LocalSolver="2"
+
+REM ####     
+set MortarLocalization="master"
 
 REM ####    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 REM ####    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
@@ -156,15 +158,15 @@ set meshGeneratorFilePy=create_vtu_for_numea.py
 set modifNumeaFilePy=modifNumeaFile.py
 REM ####    REM ####    
 REM ####     if "devenv_win64_v0_0.bat" is called first time, this *.bat file must be launched again
-IF "%DEVENV_WAS_CALLED%"=="" ( 
-set DEVENV_WAS_CALLED=0
-)
-IF "%DEVENV_WAS_CALLED%" EQU "0" (
-@ECHO "     ... devenv is being setup ..." 
-call %PATH_TO_DEVENV_BAT_FILE% 
-) ELSE (
-@echo "devenv ... was already setup"
-)
+REM IF "%DEVENV_WAS_CALLED%"=="" ( 
+REM set DEVENV_WAS_CALLED=0
+REM )
+REM IF "%DEVENV_WAS_CALLED%" EQU "0" (
+REM @ECHO "     ... devenv is being setup ..." 
+REM call %PATH_TO_DEVENV_BAT_FILE% 
+REM ) ELSE (
+REM @echo "devenv ... was already setup"
+REM )
 
 REM ####     setup mpi_size
 set /A mpi_size=%sub_Nx1%*%sub_Ny1%*%sub_Nz1% + %sub_Nx2%*%sub_Ny2%*%sub_Nz2%  
@@ -185,7 +187,7 @@ copy /y %currentDir%"\__nmaFiles__\"%NMA_FILE% .
 
 
 IF %SOLVERS% EQU -1 (
-%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%
+%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver% MortarLocalization %MortarLocalization%
 @echo " only *.nma and *.vtu files are generated (without NUMEA)"
 cd /d %currentDir% 
 EXIT /b
@@ -211,7 +213,7 @@ IF %SOLVERS% EQU 4 (set /A USE_PARDISO=1)
 set /A nnd1_1=%elm_nx1%*%sub_Nx1%+1
 
 IF %USE_PARDISO% EQU 1 ( 
-%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_pardiso" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%  
+%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_pardiso" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%  MortarLocalization %MortarLocalization%
 %NUMEA_EXE%  %NMA_FILE% 
 if %SOLVERS% NEQ 4 (
 timeout 2
@@ -221,8 +223,8 @@ timeout 2
 
 
 IF %SOLVERS% LSS 4  (
-%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver%
-mpiexec.smpd -n %mpi_size% %NUMEA_EXE%  %NMA_FILE% 1>&2 )
+%PYTHON_EXE% %meshGeneratorPath%\%modifNumeaFilePy% NMA_FILE %NMA_FILE%  Solver "gen_solver_ddsolv" blablafile %blablafile% dumpfile %dumpfile% FETI %FETI% eps_iter %eps_iter% dumpfileCSRmatrix %dumpfileCSRmatrix% LocalSolver %LocalSolver% MortarLocalization %MortarLocalization%
+mpiexec -n %mpi_size% %NUMEA_EXE%  %NMA_FILE% 1>&2 )
 
 REM ####     go back to original directory
 cd /d %currentDir% 
