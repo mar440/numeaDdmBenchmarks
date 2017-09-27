@@ -15,7 +15,7 @@ REM ####     7 - one beam (two pieces) - mortar - quasi-static problem
 REM ####     8 - two boxes in mutual contact - quasi-static problem
 REM ####     9 - two curved boxes in mutual contact - quasi-static problem
 
-set SOLVERS=2
+set SOLVERS=0
 REM ####    -1  - files *.vtu and *.nma are generated only (numea is not launched)
 REM ####     0  - launch ddsolv with '1' mpi process
 REM ####     1  - launch ddsolv with '1' mpi process + pardiso 
@@ -48,7 +48,7 @@ set PYTHON_EXE="C:\Program Files\ParaView 5.2.0-Qt4-OpenGL2-Windows-64bit\bin\pv
 REM ####     set path to "numea_driver.exe"
 REM set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
 REM set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
-set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolv\Src\Release\numea_driver.exe" 
+set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolvCopy\Src\Release\numea_driver.exe" 
 set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_am.bat"
 
 REM ####     path to evironment variables setup file (for numea etc...)
