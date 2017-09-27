@@ -4,7 +4,7 @@ REM ENABLEEXTENSIONS
 
 
 
-set BENCHMARK=1
+set BENCHMARK=6
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -15,7 +15,7 @@ REM ####     7 - one beam (two pieces) - mortar - quasi-static problem
 REM ####     8 - two boxes in mutual contact - quasi-static problem
 REM ####     9 - two curved boxes in mutual contact - quasi-static problem
 
-set SOLVERS=3
+set SOLVERS=2
 REM ####    -1  - files *.vtu and *.nma are generated only (numea is not launched)
 REM ####     0  - launch ddsolv with '1' mpi process
 REM ####     1  - launch ddsolv with '1' mpi process + pardiso 
@@ -24,20 +24,20 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=10 
-set elm_ny1=10 
-set elm_nz1=10
+set elm_nx1=8
+set elm_ny1=8
+set elm_nz1=8
               
-set sub_Nx1=8 
+set sub_Nx1=2 
 set sub_Ny1=2 
 set sub_Nz1=2
               
-set elm_nx2=10 
-set elm_ny2=10 
-set elm_nz2=10
+set elm_nx2=5
+set elm_ny2=5
+set elm_nz2=5
               
 set sub_Nx2=2 
-set sub_Ny2=1 
+set sub_Ny2=2 
 set sub_Nz2=2
             
 REM ####     set "DEVENV_WAS_CALLED=0"
@@ -46,19 +46,21 @@ REM ####     set path to "python.exe"
 set PYTHON_EXE="C:\Program Files\ParaView 5.2.0-Qt4-OpenGL2-Windows-64bit\bin\pvpython.exe" 
 
 REM ####     set path to "numea_driver.exe"
-set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
+REM set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
+REM set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
+set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolv\Src\Release\numea_driver.exe" 
+set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_am.bat"
 
 REM ####     path to evironment variables setup file (for numea etc...)
-set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
 
 REM ####     set blablafile (true or false)
 set blablafile="true"
 
 REM ####     set dumpfileCSRmatrix (true or false)
-set dumpfileCSRmatrix="false"
+set dumpfileCSRmatrix="true"
 
 REM ####     set dumpfile (true or false)
-set dumpfile="false"
+set dumpfile="true"
 
 REM ####     set FETI (1 or 2)
 set FETI="2"
