@@ -228,7 +228,8 @@ def create_fem( Lx1, Ly1, Lz1, x10, y10, z10,\
     MaterialId = np.concatenate((MaterialId1,MaterialId2))
     PartitionId = np.concatenate((PartitionId1,PartitionId2 + PartitionId1.max() + 1)) 
 
-
+    FormulationId1 = FormulationId1**0 * 1
+    FormulationId2 = FormulationId2**0 * 2
     FormulationId = np.concatenate((FormulationId1,FormulationId2))
     PieceId1 = np.ones(MaterialId1.shape[0],dtype = np.int32) * 1
     PieceId2 = np.ones(MaterialId2.shape[0],dtype = np.int32) * 2 
