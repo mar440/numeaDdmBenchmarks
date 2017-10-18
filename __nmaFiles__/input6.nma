@@ -106,8 +106,11 @@
 
 
   </MODEL>
+
   
   <FORMULATIONS>
+	<Formulation name="F3" type="PC3DHEX8" id="1"/> 
+	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/>
 	<Formulation name="f1" type="PC3DTET10" id="24"/>
 	<Formulation name="f2" type="PC3DHEX8" id="30"/>
 	<Formulation name="f3" type="PC3DHEX20" id="36"/>
@@ -149,12 +152,12 @@
     </Material>
 
     <!-- Steel -->
-    <Material name="Steel" id="1" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
+    <Material name="Steel" id="2" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
       <Param name="Nu">0.30</Param>
       <Param name="E">210000</Param>
     </Material>
 
-    <Material name="Mat3BIS" id="2" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
+    <Material name="Mat3BIS" id="1" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
       <Param name="Nu">0.1</Param>
       <Param name="E">100</Param>
     </Material> 

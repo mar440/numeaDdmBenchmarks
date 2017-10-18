@@ -3,8 +3,8 @@
 <SIMULATION name="MortarSimple">
     <LoadStep name="MortarSimple">
         <StartTime>0.</StartTime> <!-- Initial time for this load step -->
-        <EndTime>0.5</EndTime>   <!-- Final time for this load step -->
-        <StepTime>0.5</StepTime>   <!-- Time step for this load step --> 
+        <EndTime>1.0</EndTime>   <!-- Final time for this load step -->
+        <StepTime>1.0</StepTime>   <!-- Time step for this load step --> 
         <BC_list>
 	        BC_FIXE_LEFT
 	        BC_TRACTION_ROT_X 
@@ -45,30 +45,6 @@
     
 
 </SOLVER_COLLECTION>
-<!--
-<SOLVER_COLLECTION> 
-	<NonLinearSolver name="nls_ddsolv" type="FULL_NEWTON" linear="ddsolv">
-        <ConvergenceCriterion type="DN" value="1e-3"/>
-        <ConvergenceCriterion type="EN" function="ENconvergenceFactor"/>
-        </NonLinearSolver>
-        <LinearSolver name="ddsolv" type="DIRECT_DDSOLV">
-		<dumpfile>false</dumpfile>
-		<dumpfileCSRmatrix>false</dumpfileCSRmatrix>
-		<blablafile>true</blablafile>
-        <patch_radius>1</patch_radius>
-		<FETI>2</FETI>
-		<Tolerance>1e-9</Tolerance>
-		<eps_iter>1e-5</eps_iter>
-		<force_unsymmetric>1</force_unsymmetric>
-        <max_numb_it>300</max_numb_it>
-		<LocalSolver>2</LocalSolver>
-		<numb_dir>200</numb_dir>
-        <MortarLocalization>master</MortarLocalization> 
-	    </LinearSolver> 
-	    <LinearSolver name="pardiso" type="DIRECT_PARDISO">
-	    </LinearSolver> 
-</SOLVER_COLLECTION>
--->
 
   <MODEL name="square10x10">
     <Dimension>3D</Dimension>
@@ -134,125 +110,29 @@
       <Distance>10.0</Distance>
 			<ComputeOnce>true</ComputeOnce>
 			<OverlaySlices>0</OverlaySlices>
-    </MORTAR_INTERFACE>
-
+    </MORTAR_INTERFACE> 
   </MODEL>
   
   <FORMULATIONS>
-	<Formulation name="f1" type="PC3DTET10" id="24"/>
-	<Formulation name="f2" type="PC3DHEX8" id="30"/>
-	<Formulation name="f3" type="PC3DHEX20" id="36"/>
-	<Formulation name="f4" type="PC3DHEX8_3FSR" id="1000"/>
-	<Formulation name="f5" type="PC3DTET10_3FSR" id="2000"/>
+	<Formulation name="F3" type="PC3DHEX8" id="1"/> 
+	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/> 
+ <!--	     	<Formulation name="F4" type="PC3DHEX8_3FF" id="2"/>  -->
   </FORMULATIONS>
-  <!-- The material database
-       All id defined by the CellData MaterialId should have an entry
-       in this database. The material of cell given by its materialId
-       Should be present in this database with a correct 'id'.
-       All materials defined must have a different name AND a
-       different id.
-  -->
   
   <MATERIAL_COLLECTION name="db_material">
-    <!-- NOTE: FOR THIS MODEL:
-	   - Left part:  MaterialId==1
-	   - Right part: MaterialId==2
-	 So: just change the id of the below material...
-    -->
-    <!-- Material definition
-	  A material should have a unique name and unique id.
-	  The id reference the id defined by the array 'MaterialId'
-	  for each cell in the mesh (see <mesh>.vtu).
-	  Possible types:
-            - Neo_Hookean
-            - Mooney_Rivlin
-            - Arruda_Boyce
-            - Gent
-	  Rem: uncoupled should be = 0 for Neo_Hookean and 1 for others
-	  
-	  Possible volumetric_types:
-            - NEA_HOOKEAN
-            - NIKE3D
-            - TYPE1
-            - ABAQUS
-	  Parameters are:
-            - Nu, E for Nea_Hookean
-            - C0, C1 for Mooney_Rivlin
-            - Mu, Lambda_m for Arruda_Boyce
-            - Mu, Jm for Gent
-    -->
-    <Material name="Mat1" id="100" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
-      <Param name="Nu">0.30</Param>
-      <Param name="E">1000</Param>
-    </Material>
-
-    <!-- Steel -->
-    <Material name="Steel" id="22" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
-      <Param name="Nu">0.30</Param>
-      <Param name="E">210000</Param>
-    </Material>
-	
-    <Material name="Mat3" id="1" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
-      <Param name="Nu">0.1</Param>
-      <Param name="E">100</Param>
-    </Material>
-	
-		
-    <Material name="Mat3BIS" id="2" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"   >
-      <Param name="Nu">0.1</Param>
-      <Param name="E">100</Param>
-    </Material>
-	
-    <Material name="Mat4" id="20" type="Mooney_Rivlin" uncoupled="1" volumetric_type="ABAQUS"  >
-      <Param name="C0">24.</Param>
-      <Param name="C1">1.5</Param>
-      <Param name="Bulk">10000</Param>
-    </Material>
-
-    <Material name="MatNESD2" id="111" type="Mooney_Rivlin" uncoupled="1" volumetric_type="ABAQUS"  >
-      <Param name="C0">0.1863</Param>
-      <Param name="C1">0.00979</Param>
-      <Param name="Bulk">150</Param>
-    </Material>
-
-    <!--Same as above-->
-    <Material name="MatNESD2bis" id="11" type="Mooney_Rivlin" uncoupled="1" volumetric_type="ABAQUS"  >
-      <Param name="C0">0.1863</Param>
-      <Param name="C1">0.00979</Param>
-      <Param name="Bulk">150</Param>
-    </Material>	
+	<Material name="Mat_Modulo" id="1" type="Compressible_Hyperelastic">
+		<Param name="Nu">0.3</Param>
+		<Param name="E">1.0e0</Param> 
+    	</Material> 
+	<Material name="EPR_1088_tuyau_3_fourreau" id="2" type="Mooney_Rivlin" volumetric_type="NIKE3D">
+		<Param name="C0">0.00164</Param>
+		<Param name="C1">0.68525</Param>
+		<Param name="Bulk">10.0e0</Param>
+	</Material>  
   </MATERIAL_COLLECTION>
 
-  <!-- Definition of all discrete and parameter functions
-       Possible types are:
-         - discrete_function:
-	   are basic interpolation of function points
-	 - parameter_function:
-	   used to pilot parameters (combination of discrete_function, multiplier ...)
-  -->
   <FUNCTION_COLLECTION name="Functions">
 
-    <!-- This discrete function is defined by a list of 3 points.
-
-	 Linear from 0.0 to 10.0
-	 Constant from 10.0 to 100.0
-
-	 Interpolation is linear.
-
-	 Possible interpolation types are:
-         - linear
-         - piecewise_constant
-         - polynomial
-
-	 Extrapolation on the left has a constant null value
-	 Extrapolation on the right (>100.0) has a constant value of 0.5
-
-Possible extrapolation types are:
-- zero
-- continue_value
-- continue_slope
-- periodic
-    -->
 <!--Traction function used in every Traction BC-->
     <Function name="Traction" type="discrete_function">
       <Interpolation>linear</Interpolation>

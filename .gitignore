@@ -6,5 +6,5 @@
 *.json
 __python__/*.nma
 output.txt
-numea_solution
+numea_solution*
 z____*

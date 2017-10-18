@@ -186,8 +186,8 @@
 
 
 <FORMULATIONS>
-	<Formulation name="F1" type="PC3DHEX8" id="30"/>
-	<Formulation name="F2" type="PC3DHEX8" id="30"/>
+	<Formulation name="F3" type="PC3DHEX8" id="1"/> 
+	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/>
 	<!--Formulation name="F2" type="PC2DQUAD4_3FSR" id="30"/-->
 </FORMULATIONS>
 

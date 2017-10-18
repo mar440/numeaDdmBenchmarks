@@ -123,6 +123,9 @@
   <FORMULATIONS>
 	<Formulation name="f1" type="PC3DTET10" id="24"/>
 	<Formulation name="f2" type="PC3DHEX8" id="30"/>
+	<Formulation name="F_1" type="PC3DHEX8" id="1"/>
+	<Formulation name="F_2" type="PC3DHEX8" id="2"/>
+	<Formulation name="f2" type="PC3DHEX8" id="1"/>
 	<Formulation name="f3" type="PC3DHEX20" id="36"/>
 	<Formulation name="f4" type="PC3DHEX8_3FSR" id="1000"/>
 	<Formulation name="f5" type="PC3DTET10_3FSR" id="2000"/>

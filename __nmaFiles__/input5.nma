@@ -1,11 +1,5 @@
 <hmi>
-<!-- Spring-Mass System (Mesh of 5 hexahedral elements)
-     Spring is modelized by 4 elements of Neo-Hookean materiel (E=789,568 MPa and Nu=0)
-	 Mass is modelized by 1 element of Neo-Hookean material (E=100.000MPa, Nu=0 and density=1 tonne/mm3) 
-     All nodes are blocked in (Y,Z) directions and a displacement is imposed to the spring end in X-direction (Ux = 1%L) -->
-	 
 <SIMULATION name="masse_resort_hd" type="harmonic">
-<!-- Frequency steps are controlled by a parameter function (see below <FUNCTION_COLLECTION>) -->
     <FreqStep>PrFreq</FreqStep>
 		<LoadStep name="traction" >
 			<StartFreq>0.1</StartFreq>
@@ -64,6 +58,14 @@
             <Multiplier>1.0</Multiplier>
         </BC>	
     </MODEL>
+
+
+  <FORMULATIONS>
+	<Formulation name="F3" type="PC3DHEX8" id="1"/> 
+	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/>
+  </FORMULATIONS>
+
+
     <MATERIAL_COLLECTION name="db_material">
         <Material name="MatRessort" id="0" type="Neo_Hookean" uncoupled="0" volumetric_type="NEO_HOKEAN"  >
             
