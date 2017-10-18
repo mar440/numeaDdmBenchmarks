@@ -18,7 +18,7 @@ REM ####     7 - one beam (two pieces) - mortar - quasi-static problem
 REM ####     8 - two boxes in mutual contact - quasi-static problem
 REM ####     9 - two curved boxes in mutual contact - quasi-static problem
 
-set SOLVERS=0
+set SOLVERS=-1
 REM ####    -1  - files *.vtu and *.nma are generated only (numea is not launched)
 REM ####     0  - launch ddsolv with '1' mpi process
 REM ####     1  - launch ddsolv with '1' mpi process + pardiso 
@@ -27,32 +27,54 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=8
-set elm_ny1=8
-set elm_nz1=8
-              
-set sub_Nx1=2 
-set sub_Ny1=2 
-set sub_Nz1=2
-              
-set elm_nx2=5
-set elm_ny2=5
-set elm_nz2=5
-              
-set sub_Nx2=2 
-set sub_Ny2=2 
-set sub_Nz2=2
+set elm_nx1=40
+set elm_ny1=10
+set elm_nz1=10
+             
+set sub_Nx1=4
+set sub_Ny1=4
+set sub_Nz1=4
+             
+set elm_nx2=3
+set elm_ny2=3
+set elm_nz2=3
+             
+set sub_Nx2=2
+set sub_Ny2=1
+set sub_Nz2=1
+
+rem 5
+rem 5
+rem 5
+rem  
+rem 1
+rem 1
+rem 1
+rem  
+rem 6
+rem 6
+rem 6
+rem  
+rem 1
+rem 1
+rem 2
+
+
+
+
+
+
             
 REM ####     set "DEVENV_WAS_CALLED=0"
 
 REM ####     set path to "python.exe"
 set PYTHON_EXE="C:\Program Files\ParaView 5.2.0-Qt4-OpenGL2-Windows-64bit\bin\pvpython.exe" 
-
+rem numea_ddsolvCopy
 REM ####     set path to "numea_driver.exe"
 REM set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
 REM set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
-set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolvCopy\Src\Release\numea_driver.exe" 
-set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_am.bat"
+set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolv\Src\Release\numea_driver.exe" 
+set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_alex.bat"
 
 REM ####     path to evironment variables setup file (for numea etc...)
 
@@ -69,10 +91,10 @@ REM ####     set FETI (1 or 2)
 set FETI="2"
 
 REM ####     set iterative solver tolerance 
-set eps_iter="1e-6"
+set eps_iter="1e-4"
 
 REM ####     set direct solver (0 - tridiag, 1 - ?, 2 - pardiso, 3 - dissection)
-set LocalSolver="2"
+set LocalSolver="0"
 
 REM ####     
 set MortarLocalization="master"
@@ -140,9 +162,9 @@ set /A nnd1_1=%elm_nx1%*%sub_Nx1%+1
 set /A nnd1_2=%elm_ny1%*%sub_Ny1%+1
 set /A nnd1_3=%elm_nz1%*%sub_Nz1%+1 
 set /A nnd1=%nnd1_1%*%nnd1_2%*%nnd1_3%
-set /A nnd2_1=%elm_nx1%*%sub_Nx1%+1
-set /A nnd2_2=%elm_ny1%*%sub_Ny1%+1
-set /A nnd2_3=%elm_nz1%*%sub_Nz1%+1
+set /A nnd2_1=%elm_nx2%*%sub_Nx2%+1
+set /A nnd2_2=%elm_ny2%*%sub_Ny2%+1
+set /A nnd2_3=%elm_nz2%*%sub_Nz2%+1
 set /A nnd2=%nnd2_1%*%nnd2_2%*%nnd2_3%
 set /A nnd=%nnd1% + %nnd2% 
 
@@ -168,7 +190,7 @@ REM set DEVENV_WAS_CALLED=0
 REM )
 REM IF "%DEVENV_WAS_CALLED%" EQU "0" (
 REM @ECHO "     ... devenv is being setup ..." 
-REM call %PATH_TO_DEVENV_BAT_FILE% 
+call %PATH_TO_DEVENV_BAT_FILE% 
 REM ) ELSE (
 REM @echo "devenv ... was already setup"
 REM )
