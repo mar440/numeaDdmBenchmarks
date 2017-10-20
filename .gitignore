@@ -1,6 +1,6 @@
 *.sw*
 /__python__/*.sw*
-/__python__/*.dat
+*.dat
 *.bak
 *.vtu
 *.json
