@@ -27,19 +27,19 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=40
-set elm_ny1=10
-set elm_nz1=10
-             
+set elm_nx1=53
+set elm_ny1=40
+set elm_nz1=40
+            
 set sub_Nx1=4
-set sub_Ny1=4
-set sub_Nz1=4
-             
-set elm_nx2=3
-set elm_ny2=3
-set elm_nz2=3
-             
-set sub_Nx2=2
+set sub_Ny1=2
+set sub_Nz1=2
+           
+set elm_nx2=30
+set elm_ny2=30
+set elm_nz2=30
+            
+set sub_Nx2=1
 set sub_Ny2=1
 set sub_Nz2=1
 
@@ -85,7 +85,7 @@ REM ####     set dumpfileCSRmatrix (true or false)
 set dumpfileCSRmatrix="true"
 
 REM ####     set dumpfile (true or false)
-set dumpfile="true"
+set dumpfile="false"
 
 REM ####     set FETI (1 or 2)
 set FETI="2"
@@ -94,7 +94,7 @@ REM ####     set iterative solver tolerance
 set eps_iter="1e-4"
 
 REM ####     set direct solver (0 - tridiag, 1 - ?, 2 - pardiso, 3 - dissection)
-set LocalSolver="0"
+set LocalSolver="2"
 
 REM ####     
 set MortarLocalization="master"
