@@ -7,7 +7,7 @@ REM
 
 
 
-set BENCHMARK=6
+set BENCHMARK=4
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -27,21 +27,21 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=53
-set elm_ny1=40
-set elm_nz1=40
+set elm_nx1=60
+set elm_ny1=30
+set elm_nz1=30
             
-set sub_Nx1=4
+set sub_Nx1=2
 set sub_Ny1=2
 set sub_Nz1=2
            
-set elm_nx2=30
-set elm_ny2=30
-set elm_nz2=30
+set elm_nx2=20
+set elm_ny2=10
+set elm_nz2=10
             
-set sub_Nx2=1
-set sub_Ny2=1
-set sub_Nz2=1
+set sub_Nx2=2
+set sub_Ny2=2
+set sub_Nz2=2
 
 rem 5
 rem 5
@@ -73,7 +73,8 @@ rem numea_ddsolvCopy
 REM ####     set path to "numea_driver.exe"
 REM set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
 REM set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
-set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolv\Src\Release\numea_driver.exe" 
+rem set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolv\Src\Release\numea_driver.exe" 
+set NUMEA_EXE="D:\WorkSpaceAlex\build\build_numea_master\Src\Release\numea_driver.exe"
 set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_alex.bat"
 
 REM ####     path to evironment variables setup file (for numea etc...)

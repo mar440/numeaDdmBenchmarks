@@ -91,9 +91,9 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             x20 = -0.5 * Lx2 
             y20 = 0.999 * Ly1 
         elif BENCHMARK == 4:
-            Lx1 = 8.
-            Ly1 = 2.
-            Lz1 = 2. 
+            Lx1 = 6.
+            Ly1 = 1.00
+            Lz1 = 1.00
             x10 = -0.5 * Lx1
             y10 = -0.5 * Ly1
             z10 = -0.5 * Lz1 
@@ -161,6 +161,21 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             
             R1 = 6.0 * Ly2
             R2 = 3.0 * Ly2 
+        elif BENCHMARK == 10: 
+            # lower (bigger)
+            Lx1 = 4.00
+            Ly1 = 0.25
+            Lz1 = 2.00 
+            x10 = -4.00
+            y10 = 0.0
+            z10 = -1.00 
+            # upper (smaller)
+            Lx2 = 4.00
+            Ly2 = 0.25
+            Lz2 = 2.00
+            x20 = 0.00
+            y20 = 0.0
+            z20 = -1.00 
 
     elements, coordinates, PartitionId, MaterialId, FormulationId, Piece, Piece_nod, dim = \
         create_fem(  Lx1, Ly1, Lz1, x10, y10, z10, nx1, ny1, nz1, Nx1, Ny1, Nz1, R1,\
@@ -227,6 +242,8 @@ def create_fem( Lx1, Ly1, Lz1, x10, y10, z10,\
     MaterialId2 = np.ones(MaterialId2.shape[0],dtype = np.int32) * 2
     MaterialId = np.concatenate((MaterialId1,MaterialId2))
     PartitionId = np.concatenate((PartitionId1,PartitionId2 + PartitionId1.max() + 1)) 
+
+    MaterialId = np.remainder(PartitionId,2) + 1
 
     FormulationId1 = FormulationId1**0 * 1
     FormulationId2 = FormulationId2**0 * 2

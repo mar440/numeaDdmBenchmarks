@@ -115,7 +115,8 @@
   
   <FORMULATIONS>
 	<Formulation name="F3" type="PC3DHEX8" id="1"/> 
-	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/> 
+	<Formulation name="F4" type="PC3DHEX8" id="2"/> 
+<!--	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/>  -->
  <!--	     	<Formulation name="F4" type="PC3DHEX8_3FF" id="2"/>  -->
   </FORMULATIONS>
   
@@ -124,11 +125,15 @@
 		<Param name="Nu">0.3</Param>
 		<Param name="E">1.0e0</Param> 
     	</Material> 
-	<Material name="EPR_1088_tuyau_3_fourreau" id="2" type="Mooney_Rivlin" volumetric_type="NIKE3D">
+	<Material name="Mat_Modulo" id="2" type="Compressible_Hyperelastic">
+		<Param name="Nu">0.3</Param>
+		<Param name="E">50.0e0</Param> 
+    	</Material> 
+	<!--<Material name="EPR_1088_tuyau_3_fourreau" id="2" type="Mooney_Rivlin" volumetric_type="NIKE3D">
 		<Param name="C0">0.00164</Param>
 		<Param name="C1">0.68525</Param>
 		<Param name="Bulk">10.0e0</Param>
-	</Material>  
+	</Material>  -->
   </MATERIAL_COLLECTION>
 
   <FUNCTION_COLLECTION name="Functions">

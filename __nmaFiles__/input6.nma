@@ -3,8 +3,8 @@
 <SIMULATION name="DDSOLV_Conform">
     <LoadStep name="DDSOLV_Conform">
         <StartTime>0.</StartTime> <!-- Initial time for this load step -->
-        <EndTime>1.0</EndTime>   <!-- Final time for this load step -->
-        <StepTime>1.0</StepTime>   <!-- Time step for this load step --> 
+        <EndTime>0.1</EndTime>   <!-- Final time for this load step -->
+        <StepTime>0.1</StepTime>   <!-- Time step for this load step --> 
 
         <BC_list>
             BC_FIXE_LEFT
