@@ -6,12 +6,14 @@
         <EndTime>1.0</EndTime>   <!-- Final time for this load step -->
         <StepTime>1.0</StepTime>   <!-- Time step for this load step --> 
         <BC_list>
-	        BC_FIXE_X_m4
 
 	        BC_FIXE_Z_m1
-	        BC_FIXE_Z_p1
+	        BC_FIXE_Z_p1 
 
-	        BC_TRACTION_X 
+	        BC_FIXE_X_m4 
+	        BC_FIXE_Y_0 
+	        BC_FIXE_Y_p0_25 
+	        <!--BC_TRACTION_X  -->
         </BC_list> 
     </LoadStep> 
     <Solver name="gen_solver_pardiso" /> 
@@ -56,12 +58,43 @@
       <Filename>mesh.vtu</Filename>
     </Mesh>
 
+    <!-- START:		Y = 0, Y = 0.25 -->    
+    <DofSet name="FIXE_Y_0">
+      <type>selector</type>
+      <selector_name>SelY_0</selector_name>
+      <dof_isX>true</dof_isX>
+      <dof_isY>true</dof_isY>
+      <dof_isZ>true</dof_isZ>
+    </DofSet>
+
+    <BC name="BC_FIXE_Y_0" type="disp_func">
+      <Set>FIXE_Y_0</Set>
+      <Function>zero</Function>
+      <Multiplier>1.0</Multiplier>
+    </BC>
+
+    <DofSet name="FIXE_Y_p0_25">
+      <type>selector</type>
+      <selector_name>SelY_p0_25</selector_name>
+      <dof_isX>false</dof_isX>
+      <dof_isY>true</dof_isY>
+      <dof_isZ>true</dof_isZ>
+    </DofSet>
+
+    <BC name="BC_FIXE_Y_p0_25" type="disp_func">
+      <Set>FIXE_Y_p0_25</Set>
+      <Function>zero</Function>
+      <Multiplier>1.0</Multiplier>
+    </BC>
+    <!-- END:		Y = -1, Y = 1 -->    
+
+
 
     <!-- START:		Z = -1, Z = 1 -->    
     <DofSet name="FIXE_Z_m1">
       <type>selector</type>
       <selector_name>SelZ_m1</selector_name>
-      <dof_isX>true</dof_isX>
+      <dof_isX>false</dof_isX>
       <dof_isY>true</dof_isY>
       <dof_isZ>true</dof_isZ>
     </DofSet>
@@ -75,7 +108,7 @@
     <DofSet name="FIXE_Z_p1">
       <type>selector</type>
       <selector_name>SelZ_p1</selector_name>
-      <dof_isX>true</dof_isX>
+      <dof_isX>false</dof_isX>
       <dof_isY>true</dof_isY>
       <dof_isZ>true</dof_isZ>
     </DofSet>
@@ -85,7 +118,7 @@
       <Function>zero</Function>
       <Multiplier>1.0</Multiplier>
     </BC>
-    <!-- START:		Z = -1, Z = 1 -->    
+    <!-- END:		Z = -1, Z = 1 -->    
 	
     <!-- LEFT Boundary condition -->
     <DofSet name="FIXE_X_m4">
@@ -142,6 +175,17 @@
 			<ComputeOnce>true</ComputeOnce>
 			<OverlaySlices>0</OverlaySlices>
     </MORTAR_INTERFACE> 
+
+
+    <MeshBoundary name="iga_side">
+        <Selector>SelX_p4</Selector>
+    </MeshBoundary> 
+
+    <PRESSURE_CONDITION name="Press" value="1." function="FcPress">
+    	<MeshBoundary>iga_side</MeshBoundary>
+    </PRESSURE_CONDITION>
+
+
   </MODEL>
   
   <FORMULATIONS>
@@ -168,6 +212,14 @@
   </MATERIAL_COLLECTION>
 
   <FUNCTION_COLLECTION name="Functions">
+
+
+	<Function name="FcPress" type="discrete_function">
+      <Points>
+          0    0.0
+         10.0  1.0
+      </Points>
+    </Function>    
 
 <!--Traction function used in every Traction BC-->
     <Function name="Traction" type="discrete_function">
@@ -213,16 +265,33 @@
   <SELECTOR_COLLECTION name="Selectors">
     
 
+
+    <Selector name="SelY_p0_25" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <Point> 0. 0.25 0.</Point>
+      <Vector>0. 1.00 0.</Vector>
+      <region>boundary</region>
+    </Selector>
+    
+    <Selector name="SelY_0" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <Point> 0. 0.00 0.</Point>
+      <Vector>0. 1.00 0.</Vector>
+      <region>boundary</region>
+    </Selector>
+
+
+
     <Selector name="SelZ_p1" type="planar_selector">
       <epsilon>0.001</epsilon>
-      <Point>0. 1. 0.</Point>
+      <Point> 0. 0. 1.</Point>
       <Vector>0. 0. 1.</Vector>
       <region>boundary</region>
     </Selector>
     
     <Selector name="SelZ_m1" type="planar_selector">
       <epsilon>0.001</epsilon>
-      <Point>0. -1. 0.</Point>
+      <Point> 0. 0. -1.</Point>
       <Vector>0. 0. -1.</Vector>
       <region>boundary</region>
     </Selector>
@@ -231,14 +300,14 @@
 
     <Selector name="SelX_p4" type="planar_selector">
       <epsilon>0.001</epsilon>
-      <Point>4. 0. 0.</Point>
+      <Point>1. 0. 0.</Point>
       <Vector>1. 0. 0.</Vector>
       <region>boundary</region>
     </Selector>
     
     <Selector name="SelX_m4" type="planar_selector">
       <epsilon>0.001</epsilon>
-      <Point>-4. 0. 0.</Point>
+      <Point>-1. 0. 0.</Point>
       <Vector>-1. 0. 0.</Vector>
       <region>boundary</region>
     </Selector>

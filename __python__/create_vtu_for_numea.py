@@ -163,14 +163,14 @@ def main(Nx1 = 1, Ny1 = 2, Nz1 = 1,nx1 = 4, ny1 = 2, nz1 = 2, \
             R2 = 3.0 * Ly2 
         elif BENCHMARK == 10: 
             # lower (bigger)
-            Lx1 = 4.00
+            Lx1 = 1.00
             Ly1 = 0.25
             Lz1 = 2.00 
-            x10 = -4.00
+            x10 = -1.00
             y10 = 0.0
             z10 = -1.00 
             # upper (smaller)
-            Lx2 = 4.00
+            Lx2 = 1.00
             Ly2 = 0.25
             Lz2 = 2.00
             x20 = 0.00
@@ -257,7 +257,7 @@ def create_fem( Lx1, Ly1, Lz1, x10, y10, z10,\
 
 
 
-    if BENCHMARK == 7:
+    if BENCHMARK == 7 or BENCHMARK == 10:
         np.savetxt('coordinatesLeft.dat',coordinates1)
         np.savetxt('coordinatesRight.dat',coordinates2)
         np.savetxt('elements.dat',elements) 

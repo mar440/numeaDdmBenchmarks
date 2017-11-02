@@ -28,7 +28,7 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=16
+set elm_nx1=4
 set elm_ny1=1
 set elm_nz1=8
             
@@ -36,7 +36,7 @@ set sub_Nx1=1
 set sub_Ny1=1
 set sub_Nz1=1
            
-set elm_nx2=16
+set elm_nx2=4
 set elm_ny2=1
 set elm_nz2=4
             
@@ -87,7 +87,7 @@ REM ####     set dumpfileCSRmatrix (true or false)
 set dumpfileCSRmatrix="true"
 
 REM ####     set dumpfile (true or false)
-set dumpfile="false"
+set dumpfile="true"
 
 REM ####     set FETI (1 or 2)
 set FETI="2"
