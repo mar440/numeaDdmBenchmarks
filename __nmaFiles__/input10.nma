@@ -1,0 +1,283 @@
+<hmi>
+
+<SIMULATION name="MortarSimple">
+    <LoadStep name="MortarSimple">
+        <StartTime>0.</StartTime> <!-- Initial time for this load step -->
+        <EndTime>1.0</EndTime>   <!-- Final time for this load step -->
+        <StepTime>1.0</StepTime>   <!-- Time step for this load step --> 
+        <BC_list>
+	        BC_FIXE_X_m4
+
+	        BC_FIXE_Z_m1
+	        BC_FIXE_Z_p1
+
+	        BC_TRACTION_X 
+        </BC_list> 
+    </LoadStep> 
+    <Solver name="gen_solver_pardiso" /> 
+</SIMULATION> 
+
+
+<SOLVER_COLLECTION>
+
+    <NonLinearSolver linear="lin_ddsolv" name="gen_solver_ddsolv" type="FULL_NEWTON">
+        <ConvergenceCriterion type="DN" value="1e-3" />
+        <ConvergenceCriterion function="ENconvergenceFactor" type="EN" />
+    </NonLinearSolver> 
+
+    <LinearSolver name="lin_ddsolv" type="DIRECT_DDSOLV">
+        <dumpfile>false</dumpfile>
+        <dumpfileCSRmatrix>true</dumpfileCSRmatrix>
+        <blablafile>true</blablafile>
+        <patch_radius>1</patch_radius>
+        <FETI>2</FETI>
+        <Tolerance>1e-9</Tolerance>
+        <eps_iter>1e-4</eps_iter>
+        <force_unsymmetric>1</force_unsymmetric>
+        <MortarLocalization>master</MortarLocalization> 
+        <!--    <mortar_localization>slave</mortar_localization>  -->
+        <LocalSolver>2</LocalSolver>
+    </LinearSolver> 
+
+    <NonLinearSolver linear="lin_pardiso" name="gen_solver_pardiso" type="FULL_NEWTON">
+        <ConvergenceCriterion type="DN" value="1e-3" />
+        <ConvergenceCriterion function="ENconvergenceFactor" type="EN" />
+    </NonLinearSolver> 
+
+    <LinearSolver name="lin_pardiso" type="DIRECT_PARDISO">
+    </LinearSolver> 
+    
+
+</SOLVER_COLLECTION>
+
+  <MODEL name="square10x10">
+    <Dimension>3D</Dimension>
+    <Mesh name="CubesX2">
+      <Filename>mesh.vtu</Filename>
+    </Mesh>
+
+
+    <!-- START:		Z = -1, Z = 1 -->    
+    <DofSet name="FIXE_Z_m1">
+      <type>selector</type>
+      <selector_name>SelZ_m1</selector_name>
+      <dof_isX>true</dof_isX>
+      <dof_isY>true</dof_isY>
+      <dof_isZ>true</dof_isZ>
+    </DofSet>
+
+    <BC name="BC_FIXE_Z_m1" type="disp_func">
+      <Set>FIXE_Z_m1</Set>
+      <Function>zero</Function>
+      <Multiplier>1.0</Multiplier>
+    </BC>
+
+    <DofSet name="FIXE_Z_p1">
+      <type>selector</type>
+      <selector_name>SelZ_p1</selector_name>
+      <dof_isX>true</dof_isX>
+      <dof_isY>true</dof_isY>
+      <dof_isZ>true</dof_isZ>
+    </DofSet>
+
+    <BC name="BC_FIXE_Z_p1" type="disp_func">
+      <Set>FIXE_Z_p1</Set>
+      <Function>zero</Function>
+      <Multiplier>1.0</Multiplier>
+    </BC>
+    <!-- START:		Z = -1, Z = 1 -->    
+	
+    <!-- LEFT Boundary condition -->
+    <DofSet name="FIXE_X_m4">
+      <type>selector</type>
+      <selector_name>SelX_m4</selector_name>
+      <dof_isX>true</dof_isX>
+      <dof_isY>true</dof_isY>
+      <dof_isZ>true</dof_isZ>
+    </DofSet>
+
+    <BC name="BC_FIXE_X_m4" type="disp_func">
+      <Set>FIXE_X_m4</Set>
+      <Function>zero</Function>
+      <Multiplier>1.0</Multiplier>
+    </BC>
+
+    <!-- RIGHT Boundary condition -->
+    <NodeSet name="X_p4">
+      <type>selector</type>
+      <selector_name>SelX_p4</selector_name>
+    </NodeSet>
+
+
+    <BC name="BC_TRACTION_X" type="disp_trans">
+      <Set>X_p4</Set>
+      <Transf name="TxRx_X_p4_x" type="Tx">
+	<Function>Traction</Function>
+      </Transf>
+    </BC>
+
+    <!--MORTAR Boundary condition -->
+    <FacetSet name="MORTAR_LEFT">
+      <type>selector</type>
+      <selector_name>SelMortarLeft</selector_name>
+    </FacetSet>
+
+    <FacetSet name="MORTAR_RIGHT">
+      <type>selector</type>
+      <selector_name>SelMortarRight</selector_name>
+    </FacetSet>
+
+    <MeshBoundary name="MortarLeft">
+      <FacetSet>MORTAR_LEFT</FacetSet>
+    </MeshBoundary>
+
+    <MeshBoundary name="MortarRight">
+      <FacetSet>MORTAR_RIGHT</FacetSet>
+    </MeshBoundary>
+
+    <MORTAR_INTERFACE name="mortar1">
+      <PART_A name="MortarRight"/>
+      <PART_B name="MortarLeft"/>
+      <Distance>10.0</Distance>
+			<ComputeOnce>true</ComputeOnce>
+			<OverlaySlices>0</OverlaySlices>
+    </MORTAR_INTERFACE> 
+  </MODEL>
+  
+  <FORMULATIONS>
+	<Formulation name="F3" type="PC3DHEX8" id="1"/> 
+	<Formulation name="F4" type="PC3DHEX8" id="2"/> 
+<!--	<Formulation name="F4" type="PC3DHEX8_3FSR" id="2"/>  -->
+ <!--	     	<Formulation name="F4" type="PC3DHEX8_3FF" id="2"/>  -->
+  </FORMULATIONS>
+  
+  <MATERIAL_COLLECTION name="db_material">
+	<Material name="Mat_Modulo" id="1" type="Compressible_Hyperelastic">
+		<Param name="Nu">0.3</Param>
+		<Param name="E">1.0e0</Param> 
+    	</Material> 
+	<Material name="Mat_Modulo" id="2" type="Compressible_Hyperelastic">
+		<Param name="Nu">0.3</Param>
+		<Param name="E">1.0e0</Param> 
+    	</Material> 
+	<!--<Material name="EPR_1088_tuyau_3_fourreau" id="2" type="Mooney_Rivlin" volumetric_type="NIKE3D">
+		<Param name="C0">0.00164</Param>
+		<Param name="C1">0.68525</Param>
+		<Param name="Bulk">10.0e0</Param>
+	</Material>  -->
+  </MATERIAL_COLLECTION>
+
+  <FUNCTION_COLLECTION name="Functions">
+
+<!--Traction function used in every Traction BC-->
+    <Function name="Traction" type="discrete_function">
+      <Interpolation>linear</Interpolation>
+      <Extrapolation_left>zero</Extrapolation_left>
+      <Extrapolation_right>continue_value</Extrapolation_right>
+      <Points>
+        0.0    	0.0
+        1.1  	0.55
+      </Points>
+    </Function>
+
+    <Function name="fct_one" type="discrete_function">
+      <Interpolation>linear</Interpolation>
+      <Extrapolation_left>continue_value</Extrapolation_left>
+      <Extrapolation_right>continue_value</Extrapolation_right>
+      <Points>
+        0.0       1.0
+        1000000.0 1.0
+      </Points>
+    </Function>
+
+    <Function name="ENconvergenceFactor" type="parameter_function">
+      <Multiplier>2e-3</Multiplier>
+      <ft>fct_one</ft>
+    </Function>
+
+
+    <Function name="penalty1" type="parameter_function">
+      <Multiplier>500.</Multiplier>
+    </Function>
+  </FUNCTION_COLLECTION>
+
+
+
+  <!-- List of selectors (eg selection)
+       Possible types of selectors:
+         - planar_selector
+	 - material
+	 - material list
+	 - point material (the material closer to the point is selected)
+  -->
+  <SELECTOR_COLLECTION name="Selectors">
+    
+
+    <Selector name="SelZ_p1" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <Point>0. 1. 0.</Point>
+      <Vector>0. 0. 1.</Vector>
+      <region>boundary</region>
+    </Selector>
+    
+    <Selector name="SelZ_m1" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <Point>0. -1. 0.</Point>
+      <Vector>0. 0. -1.</Vector>
+      <region>boundary</region>
+    </Selector>
+
+
+
+    <Selector name="SelX_p4" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <Point>4. 0. 0.</Point>
+      <Vector>1. 0. 0.</Vector>
+      <region>boundary</region>
+    </Selector>
+    
+    <Selector name="SelX_m4" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <Point>-4. 0. 0.</Point>
+      <Vector>-1. 0. 0.</Vector>
+      <region>boundary</region>
+    </Selector>
+
+    <Selector name="SelMortarLeft" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <point>0. 0. 0.</point>
+        <Vector>1. 0. 0.</Vector>
+      <region>boundary</region>
+      <entity>facet</entity>
+      <piece>1</piece>
+    </Selector>
+
+    <Selector name="SelMortarRight" type="planar_selector">
+      <epsilon>0.001</epsilon>
+      <point>0. 0. 0.</point>
+      <Vector>-1. 0. 0.</Vector>
+      <region>boundary</region>
+      <entity>facet</entity>
+      <piece>2</piece>
+    </Selector>
+  </SELECTOR_COLLECTION>
+
+  <PostProcessing> 
+    <Output name="out_Model" type="Model" mesh="all" output_frequency="increment" write="paraview">
+        <displace value="yes"/>
+        <internal_force value="yes"/>
+    </Output> 
+  </PostProcessing>
+
+  <!--  PostProcessing options:
+
+  Can define for each LoadStep a specific behaviour.
+  eg: What to print and when.
+  
+  
+  Rem: This block is optional
+  -->
+<!--    <POST disable="0" /> -->
+
+
+</hmi>
