@@ -7,7 +7,7 @@ REM
 
 
 
-set BENCHMARK=4
+set BENCHMARK=7
 REM ####     1 - one body (arch) - quasi-static problem
 REM ####     2 - two bodies (rectangular and arch) in mutual contact - quasi-static problem
 REM ####     3 - two squares (two pieces) in mutual contact - quasi-static problem
@@ -18,7 +18,7 @@ REM ####     7 - one beam (two pieces) - mortar - quasi-static problem
 REM ####     8 - two boxes in mutual contact - quasi-static problem
 REM ####     9 - two curved boxes in mutual contact - quasi-static problem
 
-set SOLVERS=-1
+set SOLVERS=2
 REM ####    -1  - files *.vtu and *.nma are generated only (numea is not launched)
 REM ####     0  - launch ddsolv with '1' mpi process
 REM ####     1  - launch ddsolv with '1' mpi process + pardiso 
@@ -27,21 +27,21 @@ REM ####     3  - launch ddsolv with 'n' mpi processes + pardiso
 REM ####     4  - launch pardiso only
 
 
-set elm_nx1=60
-set elm_ny1=30
-set elm_nz1=30
+set elm_nx1=5
+set elm_ny1=5
+set elm_nz1=5
             
 set sub_Nx1=2
-set sub_Ny1=2
-set sub_Nz1=2
+set sub_Ny1=1
+set sub_Nz1=1
            
-set elm_nx2=20
+set elm_nx2=10
 set elm_ny2=10
 set elm_nz2=10
             
-set sub_Nx2=2
-set sub_Ny2=2
-set sub_Nz2=2
+set sub_Nx2=1
+set sub_Ny2=1
+set sub_Nz2=1
 
 rem 5
 rem 5
@@ -69,13 +69,16 @@ REM ####     set "DEVENV_WAS_CALLED=0"
 
 REM ####     set path to "python.exe"
 set PYTHON_EXE="C:\Program Files\ParaView 5.2.0-Qt4-OpenGL2-Windows-64bit\bin\pvpython.exe" 
-rem numea_ddsolvCopy
-REM ####     set path to "numea_driver.exe"
-REM set NUMEA_EXE="D:\Fanny\BuildNumea\Win64_MPI\Src\Release\numea_driver.exe"
-REM set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_V1.12.bat"
-rem set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_ddsolv\Src\Release\numea_driver.exe" 
-set NUMEA_EXE="D:\WorkSpaceAlex\build\build_numea_master\Src\Release\numea_driver.exe"
-set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_alex.bat"
+
+REM ####     set path to "numea_driver.exe" 
+REM set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_alex_MORTAR.bat"
+REM set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_mortar\Src\numea_driver\Release\numea_driver.exe" 
+
+set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_win64_New_IRIT_alex_MORTAR.bat"
+set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_mortar\Src\numea_driver\Release\numea_driver.exe" 
+
+set PATH_TO_DEVENV_BAT_FILE="D:\Fanny\DevEnv\Win64\devenv_cluster.bat"
+set NUMEA_EXE="d:\WorkSpaceAlex\build\build_numea_cluster\Src\numea_driver\Release\numea_driver.exe" 
 
 REM ####     path to evironment variables setup file (for numea etc...)
 
@@ -152,7 +155,8 @@ set sub_Ny2=0
 set sub_Nz2=0
 )
 
-REM BENCHMARKS = 8, 9 are two 3-dim domains (no need to correct number of MPI processes)
+REM BENCHMARKS = 7, 8, 9 are two 3-dim domains 
+rem 	(no need to correct number of MPI processes)
 
 
 
